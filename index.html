@@ -25,7 +25,7 @@
             --ease: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
 
         body {
             background: var(--bg);
@@ -34,6 +34,7 @@
             font-weight: 300;
             line-height: 1.7;
             overflow-x: hidden;
+            overflow-wrap: break-word;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
@@ -127,6 +128,7 @@
             align-items: center;
             padding-top: 6rem;
             position: relative;
+            overflow: hidden;
         }
 
         .hero::before {
