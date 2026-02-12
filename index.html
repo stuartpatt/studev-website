@@ -1,22 +1,585 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>StuDev Ltd - Coming Soon</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StuDev — Mobile Development & Technical Consulting</title>
+    <meta name="description" content="UK-based development studio specializing in mobile applications and technical consulting.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Fira+Code:wght@300;400;500&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f5f5f5; }
-        .container { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 10px; }
-        h1 { color: #333; }
-        p { color: #666; line-height: 1.6; }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #08080c;
+            --bg-elevated: #101018;
+            --text: #e8e4dd;
+            --text-dim: #6a6670;
+            --accent: #c8ff00;
+            --accent-glow: rgba(200, 255, 0, 0.06);
+            --border: rgba(232, 228, 221, 0.07);
+            --font-display: 'Syne', sans-serif;
+            --font-mono: 'Fira Code', monospace;
+            --font-body: 'Work Sans', sans-serif;
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-body);
+            font-weight: 300;
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        ::selection { background: var(--accent); color: var(--bg); }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0);
+            background-size: 32px 32px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ---- NAV ---- */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.4s ease;
+        }
+
+        nav.scrolled {
+            padding: 1rem 3rem;
+            background: rgba(8, 8, 12, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1.3rem;
+            letter-spacing: -0.02em;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .nav-logo span { color: var(--accent); }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+            font-family: var(--font-mono);
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        /* ---- LAYOUT ---- */
+        section {
+            position: relative;
+            z-index: 3;
+            padding: 8rem 3rem;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        .divider {
+            border: none;
+            height: 1px;
+            background: var(--border);
+            margin: 0 3rem;
+            position: relative;
+            z-index: 3;
+        }
+
+        /* ---- HERO ---- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 6rem;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 35%;
+            left: 45%;
+            transform: translate(-50%, -50%);
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .hero-label {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--accent);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .hero-label::before {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 1px;
+            background: var(--accent);
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 7.5vw, 6.5rem);
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 2rem;
+            max-width: 900px;
+        }
+
+        .hero-title em {
+            font-style: normal;
+            color: var(--accent);
+        }
+
+        .hero-description {
+            font-size: 1.15rem;
+            color: var(--text-dim);
+            max-width: 500px;
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.1rem 2.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            text-decoration: none;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: -0.01em;
+            transition: all 0.3s var(--ease);
+        }
+
+        .hero-cta::after {
+            content: '\2192';
+            transition: transform 0.3s var(--ease);
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(200, 255, 0, 0.2);
+        }
+
+        .hero-cta:hover::after { transform: translateX(5px); }
+
+        /* ---- SECTION LABELS ---- */
+        .section-label {
+            font-family: var(--font-mono);
+            font-size: 0.73rem;
+            color: var(--accent);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .section-heading {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 4rem;
+            line-height: 1.15;
+        }
+
+        /* ---- SERVICES ---- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+        }
+
+        .service-card {
+            background: var(--bg-elevated);
+            padding: 3rem 2.5rem;
+            border: 1px solid var(--border);
+            transition: all 0.5s var(--ease);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s var(--ease);
+        }
+
+        .service-card:hover {
+            background: rgba(200, 255, 0, 0.015);
+            border-color: rgba(200, 255, 0, 0.12);
+        }
+
+        .service-card:hover::before { transform: scaleX(1); }
+
+        .service-number {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            opacity: 0.5;
+        }
+
+        .service-title {
+            font-family: var(--font-display);
+            font-size: 1.45rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .service-text {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.75;
+        }
+
+        /* ---- ABOUT ---- */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 6rem;
+            align-items: start;
+        }
+
+        .about-text {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            line-height: 1.85;
+        }
+
+        .about-text strong {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .about-principles {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            padding-top: 0.5rem;
+        }
+
+        .principle {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            padding: 1.25rem 1.5rem;
+            border: 1px solid var(--border);
+            transition: border-color 0.3s ease;
+        }
+
+        .principle:hover { border-color: rgba(200, 255, 0, 0.2); }
+
+        .principle-marker {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .principle-label {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: -0.01em;
+        }
+
+        /* ---- CONTACT ---- */
+        .contact {
+            text-align: center;
+            padding: 10rem 3rem;
+        }
+
+        .contact-heading {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .contact-text {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            max-width: 460px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .contact-email {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 1.1rem;
+            color: var(--accent);
+            text-decoration: none;
+            padding: 1.1rem 2.5rem;
+            border: 1px solid var(--accent);
+            transition: all 0.3s var(--ease);
+        }
+
+        .contact-email:hover {
+            background: var(--accent);
+            color: var(--bg);
+            box-shadow: 0 12px 40px rgba(200, 255, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .contact-location {
+            margin-top: 3rem;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        /* ---- FOOTER ---- */
+        footer {
+            position: relative;
+            z-index: 3;
+            padding: 2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border);
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        footer a {
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        footer a:hover { color: var(--accent); }
+
+        .footer-links { display: flex; gap: 2rem; }
+
+        /* ---- SCROLL REVEAL ---- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero .reveal:nth-child(1) { transition-delay: 0.15s; }
+        .hero .reveal:nth-child(2) { transition-delay: 0.3s; }
+        .hero .reveal:nth-child(3) { transition-delay: 0.45s; }
+        .hero .reveal:nth-child(4) { transition-delay: 0.6s; }
+
+        .stagger-1 { transition-delay: 0s; }
+        .stagger-2 { transition-delay: 0.12s; }
+        .stagger-3 { transition-delay: 0.24s; }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 968px) {
+            section { padding: 6rem 2rem; }
+            nav { padding: 1.25rem 2rem; }
+            nav.scrolled { padding: 1rem 2rem; }
+            .services-grid { grid-template-columns: 1fr; }
+            .about-content { grid-template-columns: 1fr; gap: 3rem; }
+            .contact { padding: 8rem 2rem; }
+            footer { padding: 2rem; }
+            .divider { margin: 0 2rem; }
+        }
+
+        @media (max-width: 600px) {
+            section { padding: 5rem 1.5rem; }
+            nav { padding: 1rem 1.5rem; }
+            .nav-links { gap: 1.5rem; }
+            .nav-links a { font-size: 0.7rem; letter-spacing: 0.05em; }
+            .service-card { padding: 2.25rem 1.75rem; }
+            .hero-cta { width: 100%; justify-content: center; }
+            .contact { padding: 6rem 1.5rem; }
+            .contact-email { font-size: 0.9rem; padding: 1rem 1.75rem; }
+            footer { flex-direction: column; gap: 1rem; text-align: center; }
+            .divider { margin: 0 1.5rem; }
+            .principle { padding: 1rem 1.25rem; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>StuDev Ltd</h1>
-        <p>We're building something exciting. Our website is currently under construction.</p>
-        <p>StuDev Ltd is a UK-based development company specializing in mobile applications and technical consulting.</p>
-        <p>Contact: mela.app.contact@gmail.com</p>
-    </div>
+
+    <nav>
+        <a href="#" class="nav-logo">Stu<span>Dev</span></a>
+        <ul class="nav-links">
+            <li><a href="#services">Services</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-label reveal">Mobile Development &amp; Technical Consulting</div>
+            <h1 class="hero-title reveal">We build digital products with <em>precision</em>.</h1>
+            <p class="hero-description reveal">A UK-based development studio crafting mobile applications and providing expert technical consulting for businesses that demand quality.</p>
+            <a href="#contact" class="hero-cta reveal">Get in Touch</a>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <section id="services">
+        <div class="container">
+            <div class="section-label reveal">What we do</div>
+            <h2 class="section-heading reveal">Services</h2>
+            <div class="services-grid">
+                <div class="service-card reveal stagger-1">
+                    <div class="service-number">01</div>
+                    <h3 class="service-title">Mobile Development</h3>
+                    <p class="service-text">Native and cross-platform mobile applications built with meticulous attention to detail, performance, and user experience.</p>
+                </div>
+                <div class="service-card reveal stagger-2">
+                    <div class="service-number">02</div>
+                    <h3 class="service-title">Technical Consulting</h3>
+                    <p class="service-text">Architecture reviews, technology strategy, and expert guidance to help your team make the right technical decisions.</p>
+                </div>
+                <div class="service-card reveal stagger-3">
+                    <div class="service-number">03</div>
+                    <h3 class="service-title">Bespoke Software</h3>
+                    <p class="service-text">Custom software solutions tailored to your unique business requirements, from initial concept through to deployment.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <section id="about">
+        <div class="container">
+            <div class="section-label reveal">Who we are</div>
+            <h2 class="section-heading reveal">Built on craft</h2>
+            <div class="about-content">
+                <div class="about-text reveal">
+                    <p><strong>StuDev Ltd</strong> is a UK-based development studio founded on the principle that great software is built with the same care and precision as any fine craft.</p>
+                    <br>
+                    <p>We partner with businesses to bring ideas to life through technology. Every project we take on receives our full attention — from understanding your goals to delivering a polished product that performs flawlessly.</p>
+                </div>
+                <div class="about-principles reveal">
+                    <div class="principle">
+                        <span class="principle-marker"></span>
+                        <span class="principle-label">Precision engineering</span>
+                    </div>
+                    <div class="principle">
+                        <span class="principle-marker"></span>
+                        <span class="principle-label">Mobile-first approach</span>
+                    </div>
+                    <div class="principle">
+                        <span class="principle-marker"></span>
+                        <span class="principle-label">Quality over quantity</span>
+                    </div>
+                    <div class="principle">
+                        <span class="principle-marker"></span>
+                        <span class="principle-label">Long-term partnership</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="contact-heading reveal">Let's build something<br>together.</h2>
+            <p class="contact-text reveal">Have a project in mind? We'd love to hear about it.</p>
+            <a href="mailto:stuart@studev.app" class="contact-email reveal">stuart@studev.app</a>
+            <div class="contact-location reveal">United Kingdom</div>
+        </div>
+    </section>
+
+    <footer>
+        <span>&copy; 2026 StuDev Ltd</span>
+        <div class="footer-links">
+            <a href="/privacy">Privacy</a>
+            <a href="/terms">Terms</a>
+        </div>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        const nav = document.querySelector('nav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 50);
+        }, { passive: true });
+    </script>
+
 </body>
 </html>
